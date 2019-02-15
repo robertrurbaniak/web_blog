@@ -13,15 +13,7 @@ class Blog(object):
         self.description = description
         self._id = uuid.uuid4().hex if _id is None else _id
 
-    def new_post(self):
-        title = input("Enter post title: ")
-        content = input("Enter post content: ")
-        date = input("Enter post date, or leave blank for today (DDMMYYYY): ")
-        if date == "":
-            date = datetime.utcnow()
-
-        else:
-            date = datetime.strptime(date, "%d%m%Y")
+    def new_post(self, title, content, date=datetime.utcnow()):
 
         post = Post(blog_id=self._id,
                     title=title,

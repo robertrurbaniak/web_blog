@@ -1,8 +1,11 @@
 from src.common.database import Database
 import uuid
+from src.models.blog import Blog
+from datetime import datetime
+from flask import session
 
 
-class user(object):
+class User(object):
     def __init__(self, email, password, _id=None):
         self.email = email
         self.password = password
@@ -42,20 +45,49 @@ class user(object):
             #User does not exist, create user
             new_user = cls(email, password)
             new_user.save_to_mongo()
+            session['email'] = email
             return True
-        else
+        else:
             #User exists
             return False
 
 
-    def login(self):
-        pass
+    @staticmethod
+    def login(user_email):
+        #login_valid has already been called, now we store their email in the session
+        session['email']= user_email
+
+    @staticmethod
+    def logout():
+        session['email']= None
 
     def get_blogs(self):
-        pass
+        return Blog.find_by_author_id(self._id)
+
+    def new_blog(self, title, description):
+        #author, title, description, author_id
+        blog = Blog(author = self.email,
+                    title=title,
+                    description = description,
+                    author_id=self._id)
+        blog.save_to_mongo()
+
+    @staticmethod
+    def new_post(blog_id, title, content, date=datetime.utcnow()):
+        #title, content, author, created_date=datetime.utcnow()
+        blog = Blog.from_mongo(blog_id)
+        blog.new_post(title= title,
+                      content=content,
+                      date=date)
+
 
     def json(self):
-        pass
+        return{
+            "email": self.email,
+            "_id": self._id,
+            "password": self.password
+        }
+
 
     def save_to_mongo(self):
-        pass
+        Database.insert("users", self.json())

@@ -20,7 +20,7 @@ class Blog(object):
                     title=title,
                     content=content,
                     author=self.author,
-                    created_date=date )
+                    created_date=date)
 
         post.save_to_mongo()
 
@@ -36,15 +36,15 @@ class Blog(object):
             'author_id': self.author_id,
             'title': self.title,
             'description' : self.description,
-            'id': self._id
+            '_id': self._id
         }
 
     @classmethod
     def from_mongo(cls, id):
-        blog_data = Database.find_one(collection='blogs', query={'id' : id})
+        blog_data = Database.find_one(collection='blogs', query={'_id' : id})
         return cls(**blog_data)
 
     @classmethod
     def find_by_author_id(cls, author_id):
-        blogs = Database.find_one(collection='blogs', query={'author_id' : author_id})
+        blogs = Database.find(collection='blogs', query={'author_id' : author_id})
         return [cls(**blog) for blog in blogs]

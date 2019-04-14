@@ -17,7 +17,7 @@ class Post(object):
 
     def json(self):
         return {
-            'id': self._id,
+            '_id': self._id,
             'blog_id': self.blog_id,
             'author': self.author,
             'content': self.content,
@@ -30,7 +30,7 @@ class Post(object):
         # Ex: Post.from_mongo('123') returns a post with that id
         post_data = Database.find_one(collection='posts', query={'_id':id})
 
-        return cls(**post_data) #for each element in post_data, get the name of the element and say the objects element is equal to that.
+        return cls(**post_data) # for each element in post_data, get the name of the element and say the objects element is equal to that.
 
     @staticmethod
     def from_blog(id):

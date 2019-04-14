@@ -30,11 +30,11 @@ class User(object):
 
     @staticmethod
     def login_valid(email,password):
-        #Ex User.login_valid("robert@me.com", "1234") returns TRUE is email/password combo is correct.
-        #check whether a user's email matches the password they sent us
+        # Ex User.login_valid("robert@me.com", "1234") returns TRUE is email/password combo is correct.
+        # check whether a user's email matches the password they sent us
         user = User.get_by_email(email)
         if user is not None:
-            #Check the password from the user object in the database against what they entered into the password field
+            # Check the password from the user object in the database against what they entered into the password field
             return user.password == password
         return False
 
@@ -42,13 +42,13 @@ class User(object):
     def register(cls, email, password):
         user = User.get_by_email(email)
         if user is None:
-            #User does not exist, create user
+            # User does not exist, create user
             new_user = cls(email, password)
             new_user.save_to_mongo()
             session['email'] = email
             return True
         else:
-            #User exists
+            #  User exists
             return False
 
 
@@ -65,7 +65,7 @@ class User(object):
         return Blog.find_by_author_id(self._id)
 
     def new_blog(self, title, description):
-        #author, title, description, author_id
+        # author, title, description, author_id
         blog = Blog(author = self.email,
                     title=title,
                     description = description,
@@ -74,7 +74,7 @@ class User(object):
 
     @staticmethod
     def new_post(blog_id, title, content, date=datetime.utcnow()):
-        #title, content, author, created_date=datetime.utcnow()
+        # title, content, author, created_date=datetime.utcnow()
         blog = Blog.from_mongo(blog_id)
         blog.new_post(title= title,
                       content=content,
